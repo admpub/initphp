@@ -5,8 +5,8 @@ if (!defined('IS_INITPHP')) exit('Access Denied!');
  *-------------------------------------------------------------------------------
  * 版权所有: CopyRight By initphp.com
  * 您可以自由使用该源码，但是在使用过程中，请保留作者信息。尊重他人劳动成果就是尊重自己
- *------------------------------------------------------------------------------- 
- * Author:zhuli Dtime:2014-9-3 
+ *-------------------------------------------------------------------------------
+ * Author:zhuli Dtime:2014-9-3
 ***********************************************************************************/
 class templateInit {
 
@@ -19,7 +19,7 @@ class templateInit {
 	private $is_compile 		= true; //是否需要每次编译
 	private $driver_config;
 	private static $driver      = NULL; //定义默认的一个模板编译驱动模型
-	
+
 	/**
 	 * 模板编译-设置模板信息
 	 * Controller中使用方法：$this->view->set_template_config($config)
@@ -36,24 +36,24 @@ class templateInit {
 			$config['template_c_path'] = $config['template_c_path'] . '/' . $config['theme'];
 			if ($config['is_compile'] == true) $this->create_dir($config['template_c_path']); //创建主题文件夹
 		}
-		if (isset($config['template_path'])) 
+		if (isset($config['template_path']))
 			$this->template_path = $config['template_path'];
-		if (isset($config['template_c_path'])) 
+		if (isset($config['template_c_path']))
 			$this->template_c_path = $config['template_c_path'];
-		if (isset($config['template_type'])) 
+		if (isset($config['template_type']))
 			$this->template_type = $config['template_type'];
-		if (isset($config['template_c_type'])) 
+		if (isset($config['template_c_type']))
 			$this->template_c_type = $config['template_c_type'];
-		if (isset($config['template_tag_left'])) 
+		if (isset($config['template_tag_left']))
 			$this->template_tag_left = $config['template_tag_left'];
-		if (isset($config['template_tag_right'])) 
+		if (isset($config['template_tag_right']))
 			$this->template_tag_right = $config['template_tag_right'];
-		if (isset($config['is_compile'])) 
+		if (isset($config['is_compile']))
 			$this->is_compile = $config['is_compile'];
 		$this->driver_config = $config['driver'];
 		return true;
 	}
-	
+
 	/**
 	 * 模板编译-模板类入口函数
 	 * 1. 获取模板，如果模板未编译，则编译
@@ -72,34 +72,34 @@ class templateInit {
 		}
 		return $compile_file_name;
 	}
-	
+
 	/**
 	 * 模板编译-读取静态模板
 	 * @param  string $filename 文件名称，例如：test，不带文件.htm类型
-	 * @return 
+	 * @return
 	 */
 	private function read_template($template_file_name) {
 		if (!file_exists($template_file_name)) InitPHP::initError($template_file_name. ' is not exist!');
 		return @file_get_contents($template_file_name);
 	}
-	
+
 	/**
 	 * 模板编译-编译模板
 	 * @param  string $filename 文件名称，例如：test，不带文件.htm类型
 	 * @param  string $str 写入编译文件的数据
-	 * @return 
+	 * @return
 	 */
 	private function compile_template($compile_file_name, $str) {
 		if (($path = dirname($compile_file_name)) !== $this->template_c_path) { //自动创建文件夹
-			$this->create_dir($path); 
+			$this->create_dir($path);
 		}
 		@file_put_contents($compile_file_name, $str);
 	}
-	
+
 	/**
 	 * 模板编译-通过传入的filename，获取要编译的静态页面和生成编译文件的文件名
 	 * @param  string $filename 文件名称，例如：test，不带文件.htm类型
-	 * @return 
+	 * @return
 	 */
 	private function get_file_name($file_name) {
 		return array(
@@ -107,17 +107,17 @@ class templateInit {
 			$this->template_c_path .'/'. $file_name . '.' . $this->template_c_type //模板编译路径
 		);
 	}
-	
+
 	/**
 	 * 模板编译-检测模板目录和编译目录是否可写
-	 * @return 
+	 * @return
 	 */
 	private function check_path() {
 		if (!is_dir($this->template_path) || !is_readable($this->template_path)) InitPHP::initError('template path is unread!');
 		if (!is_dir($this->template_c_path) || !is_readable($this->template_c_path)) InitPHP::initError('compiled path is unread!');
 		return true;
 	}
-	
+
 	/**
 	 * 模板编译-编译文件-头部版本信息
 	 * @param  string $str 模板文件数据
@@ -128,7 +128,7 @@ class templateInit {
 		$version_str .= ', compiled from '. $template_file_name . ' */ ?>' . "\r\n";
 		return $version_str . $str;
 	}
-	
+
 	/**
 	 * 模板编译-标签正则替换
 	 * @param  string $str 模板文件数据
@@ -138,7 +138,7 @@ class templateInit {
 		$this->get_driver($this->driver_config);
 		return self::$driver->init($str, $this->template_tag_left, $this->template_tag_right); //编译
 	}
-	
+
 	/**
 	 * 模板编译-layout 模板layout加载机制
 	 * 1. 在HTML模板中直接使用<!--{layout:user/version}-->就可以调用模板
@@ -146,25 +146,25 @@ class templateInit {
 	 * @return string
 	 */
 	private function layout($str) {
-		preg_match_all("/(".$this->template_tag_left."layout:)(.*)(".$this->template_tag_right.")/", $str, $matches);
+		preg_match_all('/('.$this->template_tag_left.'layout:)(.*)('.$this->template_tag_right.')/', $str, $matches);
 		$matches[2] = array_unique($matches[2]); //重复值移除
 		$matches[0] = array_unique($matches[0]);
 		foreach ($matches[2] as $val) $this->template_run($val);
 		foreach ($matches[0] as $k => $v) {
 			$str = str_replace($v, $this->layout_path($matches[2][$k]), $str);
 		}
-		return $str; 
+		return $str;
 	}
-	
+
 	/**
 	 * 模板编译-layout路径
 	 * @param  string $template_name 模板名称
 	 * @return string
 	 */
 	private function layout_path($template_name) {
-		return "<?php include('".$this->template_c_path.'/'.$template_name.'.'.$this->template_c_type."'); ?>";
+		return '<?php include(\''.$this->template_c_path.'/'.$template_name.'.'.$this->template_c_type.'\'); ?>';
 	}
-	
+
 	/**
 	 * 模板编译-获取不同
 	 * @param  string $template_name 模板名称
@@ -181,11 +181,11 @@ class templateInit {
 		}
 		return self::$driver;
 	}
-	
+
 	/**
 	 *	创建目录
 	 * 	@param  string  $path   目录
-	 *  @return 
+	 *  @return
 	 */
 	private function create_dir($path) {
 		if (is_dir($path)) return false;
@@ -198,10 +198,10 @@ class templateInit {
 }
 class viewInit extends templateInit {
 
-	public  $view = array(); //视图变量 
+	public  $view = array(); //视图变量
 	private $template_arr = array(); //视图存放器
 	private $remove_tpl_arr = array(); //待移除
-	
+
 	/**
 	 * 模板-设置模板变量-将PHP中是变量输出到模板上，都需要经过此函数
 	 * 1. 模板赋值核心函数，$key => $value , 模板变量名称 => 控制器中变量
@@ -215,7 +215,7 @@ class viewInit extends templateInit {
 	public function assign($key, $value) {
 		$this->view[$key] = $value;
 	}
-	
+
 	/**
 	 * 模板-设置模板 设置HTML模板
 	 * 1. 设置模板，模板名称和类型，类型选择F和L的时候，是最先显示和最后显示的模板
@@ -234,7 +234,7 @@ class viewInit extends templateInit {
 			$this->template_arr[] = $template_name;
 		}
 	}
-	
+
 	/**
 	 * 模板-移除模板
 	 * 1. 如果在控制器的基类中已经导入头部和脚步模板，应用中需要替换头部模板
@@ -246,7 +246,7 @@ class viewInit extends templateInit {
 	public function remove_tpl($remove_tpl) {
 		$this->remove_tpl_arr[] = $remove_tpl;
 	}
-	
+
 	/**
 	 * 模板-获取模板数组
 	 * Controller中使用方法：$this->view->get_tpl();
@@ -255,7 +255,7 @@ class viewInit extends templateInit {
 	public function get_tpl() {
 		return $this->template_arr;
 	}
-	
+
 	/**
 	 * 模板-显示视图
 	 * 1. 在Controller中需要显示模板，就必须调用该函数
@@ -282,7 +282,7 @@ class viewInit extends templateInit {
 			include_once($complie_file_name);
 		}
 	}
-	
+
 	/**
 	 * 模板-处理视图存放器数组，分离头模板和脚模板顺序
 	 * @param  array  $arr 视图存放器数组
@@ -297,9 +297,9 @@ class viewInit extends templateInit {
 		if (isset($this->template_arr['L'])) {
 			array_push($temp, $this->template_arr['L']);
 		}
-		return $temp;	
+		return $temp;
 	}
-	
+
 	/**
 	 * 模板-模板变量输出过滤
 	 * @param  array  $arr 视图存放器数组
@@ -316,10 +316,10 @@ class viewInit extends templateInit {
 				if (function_exists('htmlspecialchars')) {
 					$value[$key] =  htmlspecialchars($val);
 				} else {
-					$value[$key] =  str_replace(array("&", '"', "'", "<", ">", "%3C", "%3E"), array("&amp;", "&quot;", "&#039;", "&lt;", "&gt;", "&lt;", "&gt;"), $val);
+					$value[$key] =  str_replace(array('&', '"', "'", '<', '>', '%3C', '%3E'), array('&amp;', '&quot;', '&#039;', '&lt;', '&gt;', '&lt;', '&gt;'), $val);
 				}
 			}
 		}
 	}
-	
+
 }
