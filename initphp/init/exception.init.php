@@ -74,7 +74,7 @@ line-height: 160%;
 margin-top: 1em;
 padding: 4px;}
 	-->
-	</style></head><body><div id="container"><h1>InitPHP DEBUG</h1><div class="info">(1146)'.$msg.'</div><div class="info"><p><strong>PHP Trace</strong></p><table cellpadding="5" cellspacing="1" width="100%" class="table"><tr class="bg2"><td style="width:2%">No.</td><td style="width:45%">File</td><td style="width:5%">Line</td><td style="width:48%">Code</td></tr>'.$traceMessageHtml.'</table><p><strong>SQL Query</strong></p><table cellpadding="5" cellspacing="1" width="100%" class="table"><tr class="bg2"><td style="width:2%">No.</td><td style="width:73%">SQL</td><td style="width:10%">Cost Time</td><td style="width:15%">Affected Rows</td></tr>'.$sqlTraceHtml.'</table></div> <div class="help"><a href="http://'.$_SERVER['HTTP_HOST'].'">'.$_SERVER['HTTP_HOST'].'</a> 已经将此出错信息详细记录, 由此给您带来的访问不便我们深感歉意.</div></div></body></html>';
+	</style></head><body><div id="container"><h1>InitPHP DEBUG</h1><div class="info">(1146)'.$msg.'</div><div class="info"><p><strong>PHP Trace</strong></p><table cellpadding="5" cellspacing="1" width="100%" class="table"><tr class="bg2"><td style="width:2%">No.</td><td style="width:45%">File</td><td style="width:5%">Line</td><td style="width:48%">Code</td></tr>'.$traceMessageHtml.'</table><p><strong>SQL Query</strong></p><table cellpadding="5" cellspacing="1" width="100%" class="table"><tr class="bg2"><td style="width:2%">No.</td><td style="width:73%">SQL</td><td style="width:10%">Cost Time</td><td style="width:15%">Affected Rows</td></tr>'.$sqlTraceHtml.'</table></div> <div class="help"><a href="http://'.$_SERVER['HTTP_HOST'].'">'.$_SERVER['HTTP_HOST'].'</a> 已经将此信息详细记录, 给您带来不便我们深表歉意.</div></div></body></html>';
 			$this->_recordError($msg,$this->getFile(),$this->getLine(),$mainErrorCode);
 			exit;
 		}
@@ -127,6 +127,6 @@ padding: 4px;}
 	 * @return string
 	 */
 	private function _errorLogFileName(){
-		return "initphp_error_" . date('Y-m-d').'.log';
+		return 'initphp_error_' . date('Y-m-d').'.log';
 	}
 }

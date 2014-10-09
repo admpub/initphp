@@ -50,21 +50,21 @@ class interceptorInit {
 		$return = true;
 		if (is_array($interceptor['rule']) && count($interceptor['rule']) > 0) {
 			foreach ($interceptor['rule'] as $k => $v) {
-				$file = ltrim($filePath, "/") . "/" . $v['file'] . $interceptor['postfix'] . '.php';
+				$file = ltrim($filePath, '/') . '/' . $v['file'] . $interceptor['postfix'] . '.php';
 				$class = $v['file'] . $interceptor['postfix'];
 				//处理正则匹配
 				$regular = $v['regular'];
-				if ($regular['m'] != "" && $regular['m'] != '*') {
+				if ($regular['m'] != '' && $regular['m'] != '*') {
 					if (!preg_match($regular['m'], $this->m)) {
 						continue;
 					}
 				}
-				if ($regular['c'] != "" && $regular['c'] != '*') {
+				if ($regular['c'] != '' && $regular['c'] != '*') {
 					if (!preg_match($regular['c'], $this->c)) {
 						continue;
 					}
 				}
-				if ($regular['a'] != "" && $regular['a'] != '*') {
+				if ($regular['a'] != '' && $regular['a'] != '*') {
 					if (!preg_match($regular['a'], $this->a)) {
 						continue;
 					}

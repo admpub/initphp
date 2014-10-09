@@ -19,13 +19,13 @@ class InitPHP extends coreInit {
 	 * 【静态】运行InitPHP开发框架 - 框架运行核心函数
 	 * 1. 在index.php中实例化InitPHP启动类 InitPHP::init();
 	 * 2. 初始化网站路由，运行框架
-	 * 3. 全局使用方法：InitPHP::init(); 
+	 * 3. 全局使用方法：InitPHP::init();
 	 * @return object
 	 */
-	public static function init() { 
+	public static function init() {
 		try {
 			require(INITPHP_PATH . '/init/dispatcher.init.php');
-			require(INITPHP_PATH . '/init/run.init.php'); 
+			require(INITPHP_PATH . '/init/run.init.php');
 			require(INITPHP_PATH . '/init/interceptor.init.php'); //拦截器
 			$dispacher = InitPHP::loadclass('dispatcherInit');
 			$dispacher->dispatcher();
@@ -35,12 +35,12 @@ class InitPHP extends coreInit {
 			$e->errorMessage();
 		}
 	}
-	
+
 	/**
 	 * 【静态】命令行模式运行php
 	 * 1. 例如：/usr/lib/php /usr/local/web/www/index.php index test sql
 	 * 2. index 控制器名称 test Action名称 sql controller/文件夹下的文件名称
-	 * 3. 全局使用方法：InitPHP::cli_init(); 
+	 * 3. 全局使用方法：InitPHP::cli_init();
 	 * @return object
 	 */
 	public static function cli_init($argv) {
@@ -167,8 +167,8 @@ class InitPHP extends coreInit {
 	 * @return string
 	 */
 	public static function output($string, $type = 'encode') {
-		$html = array("&", '"', "'", "<", ">", "%3C", "%3E");
-		$html_code = array("&amp;", "&quot;", "&#039;", "&lt;", "&gt;", "&lt;", "&gt;");
+		$html = array('&', '"', "'", '<', '>', '%3C', '%3E');
+		$html_code = array('&amp;', '&quot;', '&#039;', '&lt;', '&gt;', '&lt;', '&gt;');
 		if ($type == 'encode') {
 			if (function_exists('htmlspecialchars')) return htmlspecialchars($string);
 			$str = str_replace($html, $html_code, $string);
@@ -231,7 +231,7 @@ class InitPHP extends coreInit {
 	 */
 	public static function url($action, $params = array(), $baseUrl = '') {
 		$InitPHP_conf = InitPHP::getConfig();
-		$action = explode("|", $action);
+		$action = explode('|', $action);
 		$baseUrl = ($baseUrl == '') ? $InitPHP_conf['url'] : $baseUrl;
 		$ismodule = $InitPHP_conf['ismodule'];
 		switch ($InitPHP_conf['isuri']) {
@@ -244,7 +244,7 @@ class InitPHP extends coreInit {
 				}
 				return $baseUrl . $actionStr . $paramsStr;
 				break;
-			
+
 			case 'path' :
 				$actionStr = implode('/', $action);
 				$paramsStr = '';
@@ -256,7 +256,7 @@ class InitPHP extends coreInit {
 				}
 				return $baseUrl . $actionStr . $paramsStr;
 				break;
-				
+
 			case 'html' :
 				$actionStr = implode('-', $action);
 				$actionStr = $actionStr . '.htm';
@@ -266,7 +266,7 @@ class InitPHP extends coreInit {
 				}
 				return $baseUrl . $actionStr . $paramsStr;
 				break;
-			
+
 			default:
 				$actionStr = '';
 				if ($ismodule === true) {
@@ -276,7 +276,7 @@ class InitPHP extends coreInit {
 				} else {
 					$actionStr .= 'c=' . $action[0];
 					$actionStr .= '&a=' . $action[1] . '&';
-				} 
+				}
 				$actionStr = '?' . $actionStr;
 				$paramsStr = '';
 				if ($params) {
@@ -346,7 +346,7 @@ class InitPHP extends coreInit {
 		global $InitPHP_conf;
 		return $InitPHP_conf;
 	}
-	
+
 	/**
 	 * 设置配置文件，框架意外慎用！
 	 * @param $key
@@ -357,7 +357,7 @@ class InitPHP extends coreInit {
 		$InitPHP_conf[$key] = $value;
 		return $InitPHP_conf;
 	}
-	
+
 	/**
 	 * 【静态】获取项目路径
 	 * 全局使用方法：InitPHP::getAppPath('data/file.php')
@@ -379,7 +379,7 @@ class InitPHP extends coreInit {
 	public static function initError($msg, $code = 10000) {
 		throw new exceptionInit($msg, $code);
 	}
-	
+
 	/**
 	 * 【静态】调用其它Controller中的方法
 	 * 1. 一般不建议采用Controller调用另外一个Controller中的方法
@@ -389,7 +389,7 @@ class InitPHP extends coreInit {
 	 * @param $functionName   方法名称
 	 * @param $params         方法参数
 	 * @param $controllerPath 控制器文件夹名称,例如在控制器文件夹目录中，还有一层目录，user/则，该参数需要填写
-	 * @return 
+	 * @return
 	 */
 	public function getController($controllerName, $functionName, $params = array(), $controllerPath = '') {
 		$InitPHP_conf = InitPHP::getConfig();
@@ -397,14 +397,14 @@ class InitPHP extends coreInit {
 		$path = rtrim($InitPHP_conf['controller']['path'], '/') . '/' . $controllerPath . $controllerName . '.php';
 		InitPHP::import($path);
 		$controller = InitPHP::loadclass($controllerName);
-		if (!$controller) 
+		if (!$controller)
 			return InitPHP::initError('can not loadclass : ' . $controllerName);
-		if (!method_exists($controller, $functionName)) 
+		if (!method_exists($controller, $functionName))
 			return InitPHP::initError('function is not exists : ' . $controllerName);
 		if (!$params) {
 			$controller->$functionName();
 		} else {
-			call_user_func_array(array($controller, $functionName), $params); 
+			call_user_func_array(array($controller, $functionName), $params);
 		}
 	}
 
@@ -430,7 +430,7 @@ class Controller extends coreInit {
 	protected $view;
 
 	/**
-	 * 初始化 
+	 * 初始化
 	 */
 	public function __construct() {
 		parent::__construct();
@@ -440,7 +440,7 @@ class Controller extends coreInit {
 		$this->view->set_template_config($InitPHP_conf['template']); //设置模板
 		$this->view->assign('init_token', $this->controller->get_token()); //全局输出init_token标记
 		//注册全局变量，这样在Service和Dao中通过$this->common也能调用Controller中的类
-		$this->register_global('common', $this->controller); 
+		$this->register_global('common', $this->controller);
 	}
 }
 

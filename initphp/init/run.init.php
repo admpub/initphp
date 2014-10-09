@@ -61,7 +61,7 @@ class runInit {
 		$action = $_GET['a'];
 		if ($InitPHP_conf['ismodule'] == true) {
 			$module  = $_GET['m'];
-			if ($module == "" && $controller == "" && $action == "") {
+			if ($module == '' && $controller == '' && $action == '') {
 				$module = $_GET['m'] = $this->default_module;
 				$controller = $_GET['c'] = $this->default_controller;
 				$action = $_GET['a'] = $this->default_action;
@@ -72,7 +72,7 @@ class runInit {
 			}
 			$module = $module . '/';
 		} else {
-			if ($controller == "" && $action == "") {
+			if ($controller == '' && $action == '') {
 				$controller = $_GET['c'] = $this->default_controller;
 				$action = $_GET['a'] = $this->default_action;
 			}
@@ -134,7 +134,7 @@ class runInit {
 	private function parseWhiteList($initphp_list) {
 		$whiteList = $methodList = array();
 		foreach ($initphp_list as  $value) {
-			if (strpos($value, "|") == false) {
+			if (strpos($value, '|') == false) {
 				$whiteList[] = $value;
 			} else {
 				$temp = explode('|', $value);
@@ -252,8 +252,8 @@ class runInit {
 	 */
 	private function return404() {
 		header('HTTP/1.1 404 Not Found');
-		header("status: 404 Not Found");
-		$this->_error_page("404 Not Found");
+		header('status: 404 Not Found');
+		$this->_error_page('404 Not Found');
 		exit;
 	}
 
@@ -262,28 +262,28 @@ class runInit {
 	 */
 	private function return405() {
 		header('HTTP/1.1 405 Method not allowed');
-		header("status: 405 Method not allowed");
-		$this->_error_page("405 Method not allowed");
+		header('status: 405 Method not allowed');
+		$this->_error_page('405 Method not allowed');
 		exit;
 	}
-	
+
 	private function _error_page($msg) {
-		$html = "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\">
+		$html = '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
 		<html>
-		<head><title>".$msg."</title></head>
-		<body bgcolor=\"white\">
-		<h1>".$msg."</h1>
-		<p>The requested URL was ".$msg." on this server. Sorry for the inconvenience.<br/>
+		<head><title>'.$msg.'</title></head>
+		<body bgcolor="white">
+		<h1>'.$msg.'</h1>
+		<p>The requested URL was '.$msg.' on this server. Sorry for the inconvenience.<br/>
 		Please report this message and include the following information to us.<br/>
 		Thank you very much!</p>
 		<table>
 		<tr>
 		<td>Date:</td>
-		<td>".date("Y-m-d H:i:s")."</td>
+		<td>'.date("Y-m-d H:i:s").'</td>
 		</tr>
 		</table>
 		<hr/>Powered by InitPHP/3.6</body>
-		</html>";
+		</html>';
 		echo $html;
 	}
 }
