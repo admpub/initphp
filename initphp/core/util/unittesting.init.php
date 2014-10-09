@@ -15,7 +15,7 @@ class unittestingInit {
 	private $data_temp = array(); //临时存放预测数据
 	private $classname; //临时存放class
 	private $testresult= array(); //预测的结果集
-	
+
 	/**
 	 *	系统自动加载InitPHP类库
 	 *  @param  string  $class_name  类名称
@@ -42,7 +42,7 @@ class unittestingInit {
 		}
 		$this->print_result();
 	}
-	
+
 	/**
 	 *	添加预测数据
 	 *  @param  array   $function_param  方法传递的参数
@@ -54,7 +54,7 @@ class unittestingInit {
 		if (!in_array($type, $this->test_type)) $type = '=';
 		return $this->data_temp[] = array($function_param, $forecast_result, $type);
 	}
-	
+
 	/**
 	 *	预测数据
 	 *  @param  array   $function 方法名称
@@ -66,7 +66,7 @@ class unittestingInit {
 		if ($obj) {
 			if ($this->data_temp) {
 				foreach ($this->data_temp as $v) {
-					$result =call_user_func_array(array($obj, $function), $v[0]); 
+					$result =call_user_func_array(array($obj, $function), $v[0]);
 					if ($v[2] == 'type') {
 						$result_test = (strtolower(gettype($result)) == strtolower($v[1])) ? true : false;
 					} elseif ($v[2] == '=') {
@@ -81,7 +81,7 @@ class unittestingInit {
 						$result_test = ((int)$result < (int)$v[1]) ? true : false;
 					}
 					$this->testresult[] = array(
-						'result' => $result_test, 
+						'result' => $result_test,
 						'class'  => $this->classname . $InitPHP_conf['service']['service_postfix'],
 						'func'   => $function,
 						'data'   => $v[0]
@@ -91,7 +91,7 @@ class unittestingInit {
 			}
 		}
 	}
-	
+
 	/**
 	 *	打印出结果数据
 	 *  @return object
@@ -121,7 +121,7 @@ class unittestingInit {
 		}
 		echo '</div>';
 	}
-	
+
 	/**
 	 *	获取运行的service
 	 *  @return object
@@ -134,7 +134,7 @@ class unittestingInit {
 		}
 		return false;
 	}
-	
+
 	/**
 	 *	获取文件目录下所有文件
 	 *  @return object

@@ -7,25 +7,25 @@ if (!defined('IS_INITPHP')) exit('Access Denied!');
  * 您可以自由使用该源码，但是在使用过程中，请保留作者信息。尊重他人劳动成果就是尊重自己
  *-------------------------------------------------------------------------------
  * $Author:zhuli
- * $Dtime:2013-5-29 
+ * $Dtime:2013-5-29
 ***********************************************************************************/
-require_once("driver/dbbase.init.php");
-class dbhandlerInit {  
-	 
+require_once('driver/dbbase.init.php');
+class dbhandlerInit {
+
 	protected static $dbArr = array(); // 存储 driver，db对象
 	protected $db = NULL; //DB引擎对象
-	protected $driverArr = array(); 
+	protected $driverArr = array();
 	protected $dbModel = NULL; //DB配置模型，默认为default
-	
+
 	/**
-	 * 数据库初始化，DB切换入口  
+	 * 数据库初始化，DB切换入口
 	 * 1. 可以在使用中通过$this->init_db('test')来切换数据库
 	 * 2. 该函数是DB默认初始化入口
 	 * 3. 支持多数据库链接，主从，随机分布式数据库
 	 * @param obj $db
 	 */
 	public function init_db($db = '') {
-		$InitPHP_conf = InitPHP::getConfig(); 
+		$InitPHP_conf = InitPHP::getConfig();
 		$this->dbModel = ($db == '') ? 'default' : $db;  //Db模型
 		$driver  = $InitPHP_conf['db']['driver']; //Db引擎
 		if (isset(self::$dbArr[$this->dbModel])) {
@@ -37,24 +37,24 @@ class dbhandlerInit {
 		$db_type 	= $InitPHP_conf['db'][$this->dbModel]['db_type'];
 		$config 	= $InitPHP_conf['db'][$this->dbModel];
 		switch ($db_type) {
-			case 1: //主从模型 
+			case 1: //主从模型
 				$key = floor(mt_rand(1,(count($config) - 2)));
 				self::$dbArr[$this->dbModel]['master']['link_id'] = $this->db_connect($config[0], $driver);
 				self::$dbArr[$this->dbModel]['salver']['link_id'] = $this->db_connect($config[$key], $driver);
 				break;
-			
+
 			case 2: //随机模型
 				$key = floor(mt_rand(0,count($config) - 2));
 				self::$dbArr[$this->dbModel]['link_id'] = $this->db_connect($config[$key], $driver);
 				break;
-				
+
 			default: //默认单机模型
 				self::$dbArr[$this->dbModel]['link_id'] = $this->db_connect($config[0], $driver);
 				break;
 		}
 		return true;
 	}
-	
+
 	/**
 	 * 获取link_id 数据库链接资源符
 	 * @param string $sql SQL语句进行分析
@@ -65,9 +65,9 @@ class dbhandlerInit {
 		$db_type = $InitPHP_conf['db'][$this->dbModel]['db_type'];
 		if ($InitPHP_conf['issqlcontrol'] == 1) {
 			$InitPHP_conf['sqlcontrolarr'][] = $sql;
-			InitPHP::setConfig('sqlcontrolarr', $InitPHP_conf['sqlcontrolarr']);	
+			InitPHP::setConfig('sqlcontrolarr', $InitPHP_conf['sqlcontrolarr']);
 		}
-		if ($db_type == 1) { //主从 
+		if ($db_type == 1) { //主从
 			if ($this->is_insert($sql)) {
 				$this->db->link_id = self::$dbArr[$this->dbModel]['master']['link_id'];
 			} else {
@@ -77,7 +77,7 @@ class dbhandlerInit {
 			$this->db->link_id = self::$dbArr[$this->dbModel]['link_id'];
 		}
 		return $this->db->link_id;
-	} 
+	}
 
 	/**
 	 * 每次query执行完毕后，都会将默认的link_id指向默认数据库链接地址
@@ -91,7 +91,7 @@ class dbhandlerInit {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * DB链接器，主要用来链接数据库
 	 * 1. config 必要的参数：host、username、password、
@@ -114,7 +114,7 @@ class dbhandlerInit {
 		}
 		return $this->db->connect($host, $user, $password, $database, $charset, $pconnect);
 	}
-	
+
 	/**
 	 * 获取数组引擎对象
 	 * @param string $driver  暂时只支持mysql
@@ -122,11 +122,11 @@ class dbhandlerInit {
 	 */
 	private function get_db_driver($driver) {
 		$file  = $driver . '.init.php';
-		$class = $driver . 'Init'; 
+		$class = $driver . 'Init';
 		require(INITPHP_PATH . '/core/dao/db/driver/' . $file);
 		return InitPHP::loadclass($class);
 	}
-		
+
 	/**
 	 * SQL分析器
 	 * @param  string $sql SQL语句
@@ -138,7 +138,7 @@ class dbhandlerInit {
 		if ($sql_temp == 'SELECT') return false;
 		return true;
 	}
-	
+
 	/**
 	 * 按月分表-分库方法
 	 * 1. 当数据表数据量过大的时候，可以根据按月分表的方法来进行分表
@@ -156,7 +156,7 @@ class dbhandlerInit {
 			return $tbl . '_' . sprintf ( '%02d', $defaultId );
 		}
 	}
-	
+
 	/**
 	 * 根据数值来确定分表-分库方法
 	 * 1. 可以自定义分表-分库的模板前缀$tbl变量
@@ -173,10 +173,10 @@ class dbhandlerInit {
 		if ($len >= $default)
 			$str = substr($num, $len - $default, $default);
 		else
-			$str = str_pad($num, $default, '0', STR_PAD_LEFT); 
+			$str = str_pad($num, $default, '0', STR_PAD_LEFT);
 		return $tbl . '_' . $str;
 	}
-	
+
 	/**
 	 * 求余数的方式获取分表-分库方法
 	 * 1. 求余方式余数比较少，适合小型的分表法
@@ -185,10 +185,10 @@ class dbhandlerInit {
 	 * @param int $num
 	 * @param string $tbl
 	 * @param int $default
-	 * @return 
+	 * @return
 	 */
 	public function fmod_identify($num, $tbl, $default = 7) {
 		return $tbl . '_' . fmod($num/$default);
 	}
-	
+
 }

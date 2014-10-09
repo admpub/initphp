@@ -6,23 +6,23 @@ if (!defined('IS_INITPHP')) exit('Access Denied!');
  * 版权所有: CopyRight By initphp.com
  * 您可以自由使用该源码，但是在使用过程中，请保留作者信息。尊重他人劳动成果就是尊重自己
  *-------------------------------------------------------------------------------
- * Author:zhuli Dtime:2014-9-3  
+ * Author:zhuli Dtime:2014-9-3
 ***********************************************************************************/
-class sqlcontrolInit { 
-	
+class sqlcontrolInit {
+
 	/**
  	 * 数据库语句监控器-开始点
  	 * 使用方法：$this->getUtil('sqlcontrol')->start();
- 	 * @return string   
+ 	 * @return string
 	 */
 	public function start() {
-		InitPHP::setConfig('issqlcontrol', 1);		
+		InitPHP::setConfig('issqlcontrol', 1);
 	}
-	
+
 	/**
  	 * 数据库语句监控器-结束点
   	 * 使用方法：$this->getUtil('sqlcontrol')->end();
- 	 * @return string   
+ 	 * @return string
 	 */
 	public function end() {
 		$InitPHP_conf = InitPHP::getConfig();

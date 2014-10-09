@@ -13,13 +13,13 @@ class logInit {
 	private $default_log_path  = 'data/'; //默认日志目录
 	private $default_file_size = '1024000'; //默认日志文件大小
 	private $default_file_name = 'initphp_biz_error.log'; //默认日志文件名称
-	
+
 	/**
 	 * 写日志-直接写入日志文件或者邮件
 	 * 使用方法：$this->getUtil('log')->write('日志内容');
 	 * @param  string  $message  日志信息
 	 * @param  string  $log_type 日志类型
-	 * @return 
+	 * @return
 	 */
 	public function write($message, $log_type = 'DEBUG') {
 		$log_path = $this->get_file_log_name();
@@ -29,7 +29,7 @@ class logInit {
 		$message = $this->get_message($message, $log_type);
 		error_log($message, 3, $log_path, '');
 	}
-	
+
 	/**
 	 * 写日志-获取文件日志名称
 	 * @return string
@@ -38,7 +38,7 @@ class logInit {
 		$config = InitPHP::getConfig();
 		return $config['log_dir'] .  $this->default_file_name;
 	}
-		
+
 	/**
 	 * 写日志-组装message信息
 	 * @param  string  $message  日志信息
@@ -46,6 +46,6 @@ class logInit {
 	 * @return string
 	 */
 	private function get_message($message, $log_type) {
-		return  date("Y-m-d H:i:s") . " [{$log_type}] : {$message}\r\n";
+		return  date('Y-m-d H:i:s') . " [{$log_type}] : {$message}\r\n";
 	}
 }
