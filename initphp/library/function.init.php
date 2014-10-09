@@ -1,48 +1,48 @@
 <?php
-if (!defined('IS_INITPHP')) exit('Access Denied!');   
+if (!defined('IS_INITPHP')) exit('Access Denied!');
 /*********************************************************************************
  * InitPHP 3.6 国产PHP开发框架  扩展类库-方法库
  *-------------------------------------------------------------------------------
  * 版权所有: CopyRight By initphp.com
  * 您可以自由使用该源码，但是在使用过程中，请保留作者信息。尊重他人劳动成果就是尊重自己
  *-------------------------------------------------------------------------------
- * Author:zhuli Dtime:2014-9-3 
+ * Author:zhuli Dtime:2014-9-3
 ***********************************************************************************/
 class functionInit {
 
 	/**
 	 * 方法库-sign签名方法
-	 * @param $array 需要加密的参数 
+	 * @param $array 需要加密的参数
 	 * @param $secret 秘钥
 	 * @param $signName sign的名称，sign不会进行加密
 	 */
-	public function sign($array, $secret, $signName = "sign") {
+	public function sign($array, $secret, $signName = 'sign') {
 		if (count($array) == 0) {
-			return "";
+			return '';
 		}
 		ksort($array); //按照升序排序
-		$str = "";
+		$str = '';
 		foreach ($array as $key => $value) {
 			if ($signName == $key) continue;
-			$str .= $key . "=" . $value . "&";
+			$str .= $key . '=' . $value . '&';
 		}
-		$str = rtrim($str, "&");
+		$str = rtrim($str, '&');
 		return md5($str . $secret);
 	}
 
 	/**
 	 * 方法库-获取随机值
-	 * @return string  
+	 * @return string
 	 */
 	public function get_rand($str, $len) {
 		return substr(md5(uniqid(rand()*strval($str))),0, (int) $len);
 	}
-	
+
 	/**
-	 * 方法库-获取随机Hash值 
+	 * 方法库-获取随机Hash值
 	 * @return string
 	 */
-	public function get_hash($length = 13) { 
+	public function get_hash($length = 13) {
 		$chars = '0123456789abcdefghijklmnopqrstuvwxyz';
     	$max = strlen($chars) - 1;
     	mt_srand((double)microtime() * 1000000);
@@ -51,10 +51,10 @@ class functionInit {
 		}
 		return $hash;
 	}
-	
+
 	/**
 	 * 方法库-截取字符串-【该函数作者未知】
-	 * @param string  $string 字符串  
+	 * @param string  $string 字符串
 	 * @param int     $length 字符长度
 	 * @param string  $dot    截取后是否添加...
 	 * @param string  $charset编码
@@ -101,7 +101,7 @@ class functionInit {
 		$strcut = str_replace(array('&', '"', '<', '>'), array('&amp;', '&quot;', '&lt;', '&gt;'), $strcut);
 		return $strcut.$dot;
 	}
-	
+
 	/**
 	 * 方法库-字符串是否存在
 	 * @param string $str :字符或字符串
@@ -113,7 +113,7 @@ class functionInit {
 		$str = (string) $str;
 		return strstr($string,$str)===false ? false : true;
 	}
-	
+
 	/**
 	 * 方法库-token使用
 	 * @param string $type :encode-加密方法|decode-解密方法
@@ -131,22 +131,22 @@ class functionInit {
 			return true;
 		}
 	}
-	
+
 	/**
 	 * 方法库-压缩函数，主要是发送http页面内容过大的时候应用
 	 * @param string $content 内容
 	 * @return string
 	 */
 	public function gzip(&$content) {
-		if(!headers_sent()&&extension_loaded("zlib")&&strstr($_SERVER["HTTP_ACCEPT_ENCODING"],"gzip")){
+		if(!headers_sent()&&extension_loaded('zlib')&&strstr($_SERVER['HTTP_ACCEPT_ENCODING'],'gzip')){
 			$content = gzencode($content,2);
-			header("Content-Encoding: gzip");
-			header("Vary: Accept-Encoding");
-			header("Content-Length: ".strlen($content));
+			header('Content-Encoding: gzip');
+			header('Vary: Accept-Encoding');
+			header('Content-Length: '.strlen($content));
 		}
 		return $content;
 	}
-	
+
 	/**
 	 * 方法库-向父串中插入子串
 	 * @param string $string  : 父串
@@ -155,9 +155,9 @@ class functionInit {
 	 * @param string $code    : 编码
 	 * @return string
 	 */
-	public function insert_str($string, $sublen=10, $str="<br/>", $code='UTF-8'){
+	public function insert_str($string, $sublen=10, $str='<br />', $code='UTF-8'){
 		if ($code == 'UTF-8') {
-			$pa ="/[\x01-\x7f]|[\xc2-\xdf][\x80-\xbf]|\xe0[\xa0-\xbf][\x80-\xbf]|[\xe1-\xef][\x80-\xbf][\x80-\xbf]|\xf0[\x90-\xbf][\x80-\xbf][\x80-\xbf]|[\xf1-\xf7][\x80-\xbf][\x80-\xbf][\x80-\xbf]/";
+			$pa ='/[\x01-\x7f]|[\xc2-\xdf][\x80-\xbf]|\xe0[\xa0-\xbf][\x80-\xbf]|[\xe1-\xef][\x80-\xbf][\x80-\xbf]|\xf0[\x90-\xbf][\x80-\xbf][\x80-\xbf]|[\xf1-\xf7][\x80-\xbf][\x80-\xbf][\x80-\xbf]/';
 			preg_match_all($pa, $string, $t_string);
 			$n = count($t_string[0]);
 			$floor = ceil($n / $sublen);
@@ -172,7 +172,7 @@ class functionInit {
 			}
 		}
 	}
-	
+
 	/**
 	 * 方法库-加密解密函数
 	 * @param string $string  加密的字符串
@@ -191,24 +191,24 @@ class functionInit {
 		}
 		return ($type == 'ENCODE') ? base64_encode($code) : $code;
 	}
-	
+
 	/**
 	 * 方法库-输出钱的格式
 	 * @param string $num  数值
 	 * @return string
 	 */
 	public function format_number($num){
-   		return number_format($num, 2, ".", ",");
+   		return number_format($num, 2, '.', ',');
 	}
-	
+
 	/**
 	 * 方法库-字节转换-转换成MB格式等
 	 * @param string $num  数值
 	 * @return string
 	 */
 	public function bitsize($num) {
-		if(!preg_match("/^[0-9]+$/", $num)) return 0;
-		$type = array( "B", "KB", "MB", "GB", "TB", "PB" );
+		if(!preg_match('/^[0-9]+$/', $num)) return 0;
+		$type = array( 'B', 'KB', 'MB', 'GB', 'TB', 'PB' );
 		$j = 0;
 		while($num >= 1024) {
     		if( $j >= 5 ) return $num.$type[$j];
@@ -217,7 +217,7 @@ class functionInit {
    		}
    		return $num.$type[$j];
 	}
-	
+
 	/**
 	 * 方法库-数组去除空值
 	 * @param string $num  数值
@@ -230,7 +230,7 @@ class functionInit {
 				self::array_remove_empty($arr[$key]);
 			} else {
 				$value = ($trim == true) ? trim($value) : $value;
-				if ($value == "") {
+				if ($value == '') {
 					unset($arr[$key]);
 				} else {
 					$arr[$key] = $value;
@@ -238,7 +238,7 @@ class functionInit {
 			}
 		}
 	}
-	
+
    /**
 	* 生成 options html 代码
 	* @param array  $arr 健值数组
@@ -256,7 +256,7 @@ class functionInit {
 		}
 		return $string;
 	}
-	
+
 	/**
 	 * 清空数组中的空值
 	 * @param array $array
@@ -268,7 +268,7 @@ class functionInit {
 		}
 		return $array;
 	}
-	
+
 	/**
 	 * 左边清空
 	 * @param string $string
@@ -281,7 +281,7 @@ class functionInit {
 		}
 		return $string;
 	}
-	
+
 	/**
 	 * 生成唯一的订单号 20110809111259232312
 	 * 2011-年日期
@@ -295,36 +295,36 @@ class functionInit {
 	 * @return string
 	 */
 	public function trade_no() {
-		list($usec, $sec) = explode(" ", microtime());
+		list($usec, $sec) = explode(' ', microtime());
 		$usec = substr(str_replace('0.', '', $usec), 0 ,4);
 		$str  = rand(10,99);
-		return date("YmdHis").$usec.$str;
+		return date('YmdHis').$usec.$str;
 	}
-	
+
 	/**
      * 获取接受JS传递中文编码函数
      * 作者：Min
      * @param string $str
-     * @return string 
+     * @return string
      */
-    public function js_unescape($str){  
-        $ret = '';  
-        $len = strlen($str);  
-      
-        for ($i = 0; $i < $len; $i++) {  
-            if ($str[$i] == '%' && $str[$i+1] == 'u') {  
-                $val = hexdec(substr($str, $i+2, 4));  
-                if ($val < 0x7f) $ret .= chr($val);  
-                else if($val < 0x800) $ret .= chr(0xc0|($val>>6)).chr(0x80|($val&0x3f));  
-                else $ret .= chr(0xe0|($val>>12)).chr(0x80|(($val>>6)&0x3f)).chr(0x80|($val&0x3f));  
-                $i += 5;  
-            } else if ($str[$i] == '%') {  
-                $ret .= urldecode(substr($str, $i, 3));  
-                $i += 2;  
-            }  
-            else $ret .= $str[$i];  
-        }  
-        return $ret;  
+    public function js_unescape($str){
+        $ret = '';
+        $len = strlen($str);
+
+        for ($i = 0; $i < $len; $i++) {
+            if ($str[$i] == '%' && $str[$i+1] == 'u') {
+                $val = hexdec(substr($str, $i+2, 4));
+                if ($val < 0x7f) $ret .= chr($val);
+                else if($val < 0x800) $ret .= chr(0xc0|($val>>6)).chr(0x80|($val&0x3f));
+                else $ret .= chr(0xe0|($val>>12)).chr(0x80|(($val>>6)&0x3f)).chr(0x80|($val&0x3f));
+                $i += 5;
+            } else if ($str[$i] == '%') {
+                $ret .= urldecode(substr($str, $i, 3));
+                $i += 2;
+            }
+            else $ret .= $str[$i];
+        }
+        return $ret;
     }
-	
+
 }

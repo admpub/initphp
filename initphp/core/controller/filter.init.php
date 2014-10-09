@@ -102,9 +102,9 @@ class filterInit extends validateInit {
 	 */
 	public function filter_script($value) {
 		$value = preg_replace('/(javascript:)?on(click|load|key|mouse|error|abort|move|unload|change|dblclick|move|reset|resize|submit)/i','&111n\\2',$value);
-		$value = preg_replace('/<script(.*?)>(.*?)<\/script>/si','',$value);
-		$value = preg_replace('/<iframe(.*?)>(.*?)<\/iframe>/si','',$value);
-		$value = preg_replace ('/<object.+<\/object>/iesU', '', $value);
+		$value = preg_replace('/<script(.*?)>(.*?)<\\/script>/si','',$value);
+		$value = preg_replace('/<iframe(.*?)>(.*?)<\\/iframe>/si','',$value);
+		$value = preg_replace ('/<object.+<\\/object>/iesU', '', $value);
 		return $value;
 	}
 
@@ -187,7 +187,7 @@ class filterInit extends validateInit {
 	 */
 	public function filter_path($path) {
 		$path = str_replace(array("'",'#','=','`','$','%','&',';'), '', $path);
-		return rtrim(preg_replace('/(\/){2,}|(\\\){1,}/', '/', $path), '/');
+		return rtrim(preg_replace('/(\\/){2,}|(\\\\){1,}/', '/', $path), '/');
 	}
 
 	/**
